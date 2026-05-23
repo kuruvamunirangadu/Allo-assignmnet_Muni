@@ -41,3 +41,10 @@ yarn-error.log*
 next-env.d.ts
 
 /src/generated/prisma
+ 
+# Prisma client/cache
+node_modules/.prisma/
+node_modules/.cache/prisma/
+
+# VS Code
+.vscode/

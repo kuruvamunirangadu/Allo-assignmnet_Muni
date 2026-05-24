@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import type { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 
@@ -13,42 +12,24 @@ export async function GET() {
     });
 
     for (const reservation of expiredReservations) {
-      await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+      await prisma.$transaction(async (tx) => {
         const rows = await tx.$queryRaw<Array<{ id: string }>>`
-          SELECT *
-          FROM inventory
-          WHERE "productId" = ${reservation.productId}
-            AND "warehouseId" = ${reservation.warehouseId}
-          FOR UPDATE
+          SELECT * FROM inventory WHERE "productId" = ${reservation.productId} AND "warehouseId" = ${reservation.warehouseId} FOR UPDATE
         `;
 
         const inventory = rows[0];
 
-        if (!inventory) {
-          return;
-        }
+        if (!inventory) return;
 
-        await tx.inventory.update({
-          where: { id: inventory.id },
-          data: { reservedStock: { decrement: reservation.quantity } },
-        });
+        await tx.inventory.update({ where: { id: inventory.id }, data: { reservedStock: { decrement: reservation.quantity } } });
 
-        await tx.reservation.update({
-          where: { id: reservation.id },
-          data: { status: "EXPIRED" },
-        });
+        await tx.reservation.update({ where: { id: reservation.id }, data: { status: "EXPIRED" } });
       });
     }
 
-    return NextResponse.json({
-      success: true,
-      releasedReservations: expiredReservations.length,
-    });
+    return NextResponse.json({ success: true, releasedReservations: expiredReservations.length });
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      { error: "Failed to release expired reservations" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to release expired reservations" }, { status: 500 });
   }
 }

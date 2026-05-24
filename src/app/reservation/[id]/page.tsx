@@ -11,13 +11,8 @@ interface Reservation {
   quantity: number;
   status: string;
   expiresAt: string;
-  product: {
-    name: string;
-  };
-  warehouse: {
-    name: string;
-    location: string;
-  };
+  product: { name: string };
+  warehouse: { name: string; location: string };
 }
 
 export default function ReservationPage() {
@@ -75,9 +70,7 @@ export default function ReservationPage() {
 
   async function confirmReservation() {
     try {
-      const response = await fetch(`/api/reservations/${reservationId}/confirm`, {
-        method: "POST",
-      });
+      const response = await fetch(`/api/reservations/${reservationId}/confirm`, { method: "POST" });
 
       const data = await response.json();
 
@@ -100,9 +93,7 @@ export default function ReservationPage() {
 
   async function cancelReservation() {
     try {
-      const response = await fetch(`/api/reservations/${reservationId}/release`, {
-        method: "POST",
-      });
+      const response = await fetch(`/api/reservations/${reservationId}/release`, { method: "POST" });
 
       const data = await response.json();
 
@@ -151,9 +142,7 @@ export default function ReservationPage() {
               <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-slate-950 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-white">
                 Reservation details
               </div>
-              <h1 className="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
-                Secure your reservation
-              </h1>
+              <h1 className="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">Secure your reservation</h1>
               <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
                 Confirm before the timer expires or cancel to release stock back into the warehouse.
               </p>
@@ -184,25 +173,17 @@ export default function ReservationPage() {
 
             <div className="rounded-2xl border border-slate-200 bg-slate-50/90 p-4">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Status</p>
-              <p className="mt-2 inline-flex rounded-full bg-slate-950 px-3 py-1 text-sm font-semibold text-white">
-                {reservation.status}
-              </p>
+              <p className="mt-2 inline-flex rounded-full bg-slate-950 px-3 py-1 text-sm font-semibold text-white">{reservation.status}</p>
             </div>
           </div>
 
           {reservation.status === "PENDING" && (
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <button
-                onClick={confirmReservation}
-                className="inline-flex items-center justify-center rounded-full bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/20 transition hover:-translate-y-0.5 hover:bg-emerald-500"
-              >
+              <button onClick={confirmReservation} className="inline-flex items-center justify-center rounded-full bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/20 transition hover:-translate-y-0.5 hover:bg-emerald-500">
                 Confirm Purchase
               </button>
 
-              <button
-                onClick={cancelReservation}
-                className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-900 shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-50"
-              >
+              <button onClick={cancelReservation} className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-900 shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-50">
                 Cancel Reservation
               </button>
             </div>

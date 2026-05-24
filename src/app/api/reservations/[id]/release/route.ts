@@ -1,16 +1,11 @@
-import { NextResponse } from "next/server";
-import type { Prisma } from "@prisma/client";
-
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export async function POST(
-  _request: Request,
-  context: { params: Promise<{ id: string }> }
-) {
+export async function POST(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await context.params;
 
-    const result = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+    const result = await prisma.$transaction(async (tx) => {
       const reservation = await tx.reservation.findUnique({ where: { id } });
 
       if (!reservation) {
@@ -22,11 +17,7 @@ export async function POST(
       }
 
       const rows = await tx.$queryRaw<Array<{ id: string }>>`
-        SELECT *
-        FROM inventory
-        WHERE "productId" = ${reservation.productId}
-          AND "warehouseId" = ${reservation.warehouseId}
-        FOR UPDATE
+        SELECT * FROM inventory WHERE "productId" = ${reservation.productId} AND "warehouseId" = ${reservation.warehouseId} FOR UPDATE
       `;
 
       const inventory = rows[0];
@@ -35,15 +26,9 @@ export async function POST(
         return { status: 500, body: { error: "Inventory not found" } } as const;
       }
 
-      await tx.inventory.update({
-        where: { id: inventory.id },
-        data: { reservedStock: { decrement: reservation.quantity } },
-      });
+      await tx.inventory.update({ where: { id: inventory.id }, data: { reservedStock: { decrement: reservation.quantity } } });
 
-      await tx.reservation.update({
-        where: { id },
-        data: { status: "RELEASED" },
-      });
+      await tx.reservation.update({ where: { id }, data: { status: "RELEASED" } });
 
       return { status: 200, body: { success: true } } as const;
     });
@@ -51,9 +36,6 @@ export async function POST(
     return NextResponse.json(result.body, { status: result.status });
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      { error: "Failed to release reservation" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to release reservation" }, { status: 500 });
   }
 }

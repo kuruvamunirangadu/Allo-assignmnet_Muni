@@ -13,14 +13,8 @@ interface ReceiptReservation {
   createdAt: string;
   updatedAt: string;
   expiresAt: string;
-  product: {
-    name: string;
-    description?: string | null;
-  };
-  warehouse: {
-    name: string;
-    location: string;
-  };
+  product: { name: string; description?: string | null };
+  warehouse: { name: string; location: string };
 }
 
 export default function ReceiptPage() {
@@ -89,9 +83,7 @@ export default function ReceiptPage() {
               <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-emerald-600 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-white">
                 Receipt confirmed
               </div>
-              <h1 className="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
-                Receipt Details
-              </h1>
+              <h1 className="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">Receipt Details</h1>
               <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
                 Reservation confirmed successfully and stock has been deducted from inventory.
               </p>

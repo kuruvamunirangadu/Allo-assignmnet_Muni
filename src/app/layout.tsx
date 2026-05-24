@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Allo Inventory System",
+  title: "Allo Inventory System | Repo Root",
   description: "Inventory reservation system",
 };
 

@@ -125,6 +125,7 @@ export default function HomePage() {
           <span className="rounded-full bg-white/80 px-3 py-1 shadow-sm ring-1 ring-slate-200">1-click reserve</span>
           <span className="rounded-full bg-white/80 px-3 py-1 shadow-sm ring-1 ring-slate-200">Receipt handoff</span>
           <span className="rounded-full bg-slate-900 px-3 py-1 font-semibold text-white shadow-sm ring-1 ring-slate-900">Build source: repo root</span>
+          <span className="rounded-full bg-emerald-600 px-3 py-1 font-semibold text-white shadow-sm ring-1 ring-emerald-700">Deploy target locked</span>
           {lowStockCount > 0 ? (
             <span className="rounded-full bg-amber-100 px-3 py-1 font-medium text-amber-900 shadow-sm ring-1 ring-amber-200">
               {lowStockCount} low-stock locations

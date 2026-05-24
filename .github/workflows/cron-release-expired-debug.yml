@@ -1,0 +1,30 @@
+name: cron-release-expired-debug
+
+on:
+  workflow_dispatch:
+
+jobs:
+  debug-call:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call route and show response
+        env:
+          DEPLOYMENT_URL: ${{ secrets.DEPLOYMENT_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          if [ -z "$DEPLOYMENT_URL" ]; then
+            echo "Missing DEPLOYMENT_URL secret"; exit 1
+          fi
+          if [ -z "$CRON_SECRET" ]; then
+            echo "Missing CRON_SECRET secret"; exit 1
+          fi
+          echo "Calling $DEPLOYMENT_URL/api/cron/release-expired"
+          body=$(curl -sS -H "x-cron-secret: $CRON_SECRET" -w "\nHTTP_STATUS:%{http_code}\n" "$DEPLOYMENT_URL/api/cron/release-expired" || true)
+          echo "----- response -----"
+          echo "$body"
+          # exit non-zero if status not 200
+          status=$(echo "$body" | tr '\n' ' ' | sed -E 's/.*HTTP_STATUS:([0-9]{3}).*/\1/')
+          echo "HTTP status: $status"
+          if [ "$status" != "200" ]; then
+            echo "Request did not return 200"; exit 1
+          fi

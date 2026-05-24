@@ -1,8 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f4f1ea;
+  --foreground: #121212;
+  --surface: rgba(255, 255, 255, 0.82);
+  --surface-strong: rgba(255, 255, 255, 0.94);
+  --border: rgba(18, 18, 18, 0.12);
+  --accent: #0f172a;
+  --accent-soft: #e9eef9;
 }
 
 @theme inline {
@@ -14,13 +19,32 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0b1020;
+    --foreground: #f4f7fb;
+    --surface: rgba(17, 24, 39, 0.72);
+    --surface-strong: rgba(17, 24, 39, 0.92);
+    --border: rgba(255, 255, 255, 0.14);
+    --accent: #f8fafc;
+    --accent-soft: rgba(148, 163, 184, 0.22);
   }
 }
 
+html {
+  min-height: 100%;
+  background:
+    radial-gradient(circle at top left, rgba(99, 102, 241, 0.16), transparent 32%),
+    radial-gradient(circle at right top, rgba(245, 158, 11, 0.12), transparent 24%),
+    linear-gradient(180deg, var(--background) 0%, color-mix(in srgb, var(--background) 85%, #ffffff 15%) 100%);
+}
+
 body {
-  background: var(--background);
+  min-height: 100vh;
+  background: transparent;
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+  color: var(--foreground);
 }

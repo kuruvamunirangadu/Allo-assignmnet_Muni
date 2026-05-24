@@ -4,7 +4,7 @@ This folder contains the assessment app variant of the Allo reservations project
 
 ## Live deployment
 
-- App: [allo-assignmnet-muni-73aff1fc-j7tr5bgyk.vercel.app](https://allo-assignmnet-muni-73aff1fc-j7tr5bgyk.vercel.app)
+- App: [allo-assignmnet-muni-fresh.vercel.app](https://allo-assignmnet-muni-fresh.vercel.app)
 - Cron source: GitHub Actions workflow at `.github/workflows/cron-release-expired.yml`
 - Required secrets: `DEPLOYMENT_URL` and `CRON_SECRET`
 
